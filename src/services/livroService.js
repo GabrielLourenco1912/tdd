@@ -1,37 +1,42 @@
-let livros = [];
-let proximoId = 1;
+const { Livro } = require('../models');
 
-const criarLivro = (titulo, autor) => {
-    const livro = { id: proximoId++, titulo, autor, disponivel: true };
-    livros.push(livro);
+const criarLivro = async (titulo, autor) => {
+    const livro = await Livro.create({ titulo, autor });
+    return {
+        id: livro.id,
+        titulo: livro.titulo,
+        autor: livro.autor,
+    };
+};
+
+const atualizarLivro = async (titulo, autor, id) => {
+    const livro = await Livro.findByPk(id);
+    await livro.update({ titulo, autor });
+    return {
+        id: livro.id,
+        titulo: livro.titulo,
+        autor: livro.autor,
+        disponivel: livro.disponivel
+    };
+};
+
+const listarLivrosDisponiveis = async () => {
+    const livros = await Livro.findAll({ where: { disponivel: true }});
+    return livros;
+};
+
+const listarLivros = async () => {
+    const livros = await Livro.findAll();
+    return livros;
+};
+
+const deletarLivro = async (id) => {
+    await Livro.destroy({where: { id }});
+}
+
+const pegarPorId = async (id) => {
+    const livro = await Livro.findByPk(id);
     return livro;
-};
+}
 
-const buscarLivroPorId = (id) => {
-    return livros.find(l => l.id === id);
-};
-
-const atualizarLivro = (id, dados) => {
-    const index = livros.findIndex(l => l.id === id);
-    if (index === -1) return null;
-    livros[index] = { ...livros[index], ...dados };
-    return livros[index];
-};
-
-const deletarLivro = (id) => {
-    const index = livros.findIndex(l => l.id === id);
-    if (index === -1) return false;
-    livros.splice(index, 1);
-    return true;
-};
-
-const listarDisponiveis = () => {
-    return livros.filter(l => l.disponivel === true);
-};
-
-const resetarLivros = () => {
-    livros = [];
-    proximoId = 1;
-};
-
-module.exports = { criarLivro, buscarLivroPorId, atualizarLivro, deletarLivro, listarDisponiveis, resetarLivros };
+module.exports = { criarLivro, listarLivros, deletarLivro, pegarPorId, atualizarLivro, listarLivrosDisponiveis };
