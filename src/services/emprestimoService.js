@@ -1,6 +1,10 @@
 const { Emprestimo } = require('../models');
+const { pegarPorId: pegarPorIdLivro } = require("./livroService");
 
 const criarEmprestimo = async (usuario_id, livro_id, data_devolucao_prevista) => {
+    const livro = await pegarPorIdLivro(livro_id)
+    if (livro.disponivel === false) throw new Error()
+
     const emprestimo = await Emprestimo.create({ usuario_id, livro_id, data_devolucao_prevista });
     return {
         id: emprestimo.id,
@@ -27,7 +31,8 @@ const listarEmprestimo = async () => {
 };
 
 const deletarEmprestimo = async (id) => {
-    await Emprestimo.destroy({where: { id }});
+    const res = await Emprestimo.destroy({where: { id }});
+    if(res === 0) throw new Error();
 }
 
 const pegarPorId = async (id) => {

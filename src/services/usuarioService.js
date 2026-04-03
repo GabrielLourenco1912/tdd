@@ -41,7 +41,8 @@ const listarUsuarios = async () => {
 };
 
 const deletarUsuario = async (id) => {
-    await Usuario.destroy({where: { id }});
+    const res = await Usuario.destroy({where: { id }});
+    if(res === 0) throw new Error();
 }
 
 const pegarPorId = async (id) => {

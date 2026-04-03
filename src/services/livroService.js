@@ -1,11 +1,12 @@
 const { Livro } = require('../models');
 
-const criarLivro = async (titulo, autor) => {
-    const livro = await Livro.create({ titulo, autor });
+const criarLivro = async (titulo, autor, disponivel = true) => {
+    const livro = await Livro.create({ titulo, autor, disponivel });
     return {
         id: livro.id,
         titulo: livro.titulo,
         autor: livro.autor,
+        disponivel: livro.disponivel
     };
 };
 
@@ -31,7 +32,8 @@ const listarLivros = async () => {
 };
 
 const deletarLivro = async (id) => {
-    await Livro.destroy({where: { id }});
+    const res = await Livro.destroy({where: { id }});
+    if(res === 0)throw new Error();
 }
 
 const pegarPorId = async (id) => {
