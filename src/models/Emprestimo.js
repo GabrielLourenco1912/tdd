@@ -18,6 +18,10 @@ const Emprestimo = sequelize.define('Emprestimo', {
     data_devolucao_prevista: {
         type: DataTypes.DATE,
         allowNull: false,
+    },
+    devolucao: {
+        type: DataTypes.DATE,
+        allowNull: true,
     }
 }, {
     tableName: 'emprestimos',

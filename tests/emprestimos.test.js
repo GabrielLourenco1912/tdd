@@ -64,10 +64,23 @@ describe("Empréstimos", () => {
     });
 
     test("deve retornar um empréstimo pelo id", async () => {
-        // criar o teste
+        const { LIVRO_ID, USUARIO_ID } = await init();
+        const emprestimo = await axios.post(`${api}/emprestimos`, {
+            livro_id: LIVRO_ID,
+            usuario_id: USUARIO_ID,
+            data_devolucao_prevista: "2025-05-01",
+        });
+        const res = await axios.get(`${api}/emprestimos/${emprestimo.data.id}`);
+        expect(res.status).toBe(200);
+        expect(res.data).toHaveProperty("id");
+        expect(res.data).toHaveProperty("livro_id");
+        expect(res.data).toHaveProperty("data_devolucao_prevista");
+
+        await axios.delete(`${api}/emprestimos/${res.data.id}`);
     });
 
     test("deve retornar 400 ao registrar empréstimo sem livro_id", async () => {
+        expect.assertions(1);
         try {
             const { USUARIO_ID } = await init();
             await axios.post(`${api}/emprestimos`, {
@@ -80,6 +93,7 @@ describe("Empréstimos", () => {
     });
 
     test("deve retornar 400 ao registrar empréstimo sem usuario_id", async () => {
+        expect.assertions(1);
         try {
             const { LIVRO_ID } = await init();
             await axios.post(`${api}/emprestimos`, {
@@ -92,6 +106,7 @@ describe("Empréstimos", () => {
     });
 
     test("deve retornar 400 ao registrar empréstimo sem data de devolução", async () => {
+        expect.assertions(1);
         try {
             const { USUARIO_ID, LIVRO_ID } = await init();
             await axios.post(`${api}/emprestimos`, {
@@ -104,18 +119,48 @@ describe("Empréstimos", () => {
     });
 
     test("deve registrar a devolução de um empréstimo", async () => {
-        // criar o teste
+        const { LIVRO_ID, USUARIO_ID } = await init();
+        const emprestimo = await axios.post(`${api}/emprestimos`, {
+            livro_id: LIVRO_ID,
+            usuario_id: USUARIO_ID,
+            data_devolucao_prevista: "2025-05-01",
+        });
+        const res = await axios.put(`${api}/emprestimos/${emprestimo.data.id}`, {devolucao: '2026-04-03'});
+        expect(res.status).toBe(200);
+        expect(res.data.devolucao).toBe("2026-04-03T00:00:00.000Z");
     });
 
     test("deve retornar 404 ao devolver empréstimo inexistente", async () => {
-        // criar o teste
+        await expect(
+            axios.put(`${api}/emprestimos/8888`, {devolucao: '2026-04-03'})
+        ).rejects.toMatchObject({
+            response: {
+                status: 404
+            }
+        });
     });
 
     test("deve listar empréstimos de um usuário específico", async () => {
-        // criar o teste
+        const { USUARIO_ID } = await init();
+        const response = await axios.get(`${api}/emprestimos/usuarios/${USUARIO_ID}`);
+
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.data)).toBe(true);
     });
 
     test("deve retornar 400 ao emprestar livro já emprestado", async () => {
-        // criar o teste
+        expect.assertions(1);
+
+        const { LIVRO_ID, USUARIO_ID } = await init(false);
+
+        try {
+            await axios.post(`${api}/emprestimos`, {
+                livro_id: LIVRO_ID,
+                usuario_id: USUARIO_ID,
+                data_devolucao_prevista: "2025-05-01",
+            });
+        } catch (err) {
+            expect(err.response.status).toBe(400);
+        }
     });
 });

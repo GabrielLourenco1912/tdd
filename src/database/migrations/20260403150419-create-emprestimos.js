@@ -37,6 +37,11 @@ module.exports = {
         allowNull: false
       },
 
+      devolucao: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
+
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

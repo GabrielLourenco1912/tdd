@@ -1,10 +1,11 @@
 const { Router } = require('express');
-const { criar, listar, deletar, buscarPorId, atualizar } = require('../controllers/emprestimoController');
+const { criar, listar, deletar, buscarPorId, atualizar, listarPorUsuario } = require('../controllers/emprestimoController');
 
 const router = Router();
 
 router.post("/", criar);
 router.get("/", listar);
+router.get("/usuarios/:usuarioId", listarPorUsuario );
 router.get("/:id", buscarPorId);
 router.put("/:id", atualizar);
 router.delete('/:id', deletar);
