@@ -1,4 +1,4 @@
-const { criarEmprestimo, listarEmprestimo, pegarPorId, deletarEmprestimo, atualizarEmprestimo } = require('../services/emprestimos');
+const { criarEmprestimo, listarEmprestimo, pegarPorId, deletarEmprestimo, atualizarEmprestimo } = require('../services/emprestimoService');
 
 const criar = async (req, res) => {
     const { usuario_id, livro_id, data_devolucao_prevista } = req.body;
