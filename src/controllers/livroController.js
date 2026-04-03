@@ -1,10 +1,20 @@
 const { criarLivro, listarLivros, pegarPorId, deletarLivro, atualizarLivro, listarLivrosDisponiveis } = require('../services/livroService');
 
 const criar = async (req, res) => {
-    const { titulo, autor } = req.body;
+    const { titulo, autor, disponivel } = req.body;
 
     if (!titulo || !autor) return res.status(400)
         .json({ erro: 'titulo e autor são obrigatórios'})
+
+    if (disponivel === false) {
+        const livro = await criarLivro(titulo, autor, disponivel);
+        res.status(201).json(livro);
+        return;
+    } else if (disponivel === true) {
+        const livro = await criarLivro(titulo, autor, disponivel);
+        res.status(201).json(livro);
+        return;
+    }
 
     const livro = await criarLivro(titulo, autor);
     res.status(201).json(livro);

@@ -46,10 +46,14 @@ const atualizar = async (req, res) => {
 }
 
 const deletar = async (req, res) => {
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ erro: 'id é obrigatório' });
-    await deletarUsuario(id);
-    res.status(204).send();
+    try {
+        const {id} = req.params;
+        if (!id) return res.status(400).json({erro: 'id é obrigatório'});
+        await deletarUsuario(id);
+        res.status(204).send();
+    } catch (err) {
+        res.status(404).json({ error: err.message });
+    }
 }
 
 module.exports = { criar, listar, buscarPorId, atualizar, deletar };

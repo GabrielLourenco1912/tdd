@@ -1,13 +1,17 @@
 const { criarEmprestimo, listarEmprestimo, pegarPorId, deletarEmprestimo, atualizarEmprestimo } = require('../services/emprestimoService');
 
 const criar = async (req, res) => {
-    const { usuario_id, livro_id, data_devolucao_prevista } = req.body;
+    try {
+        const {usuario_id, livro_id, data_devolucao_prevista} = req.body;
 
-    if (!usuario_id || !livro_id || !data_devolucao_prevista) return res.status(400)
-        .json({ erro: 'livro, usuario e data de devolução são obrigatórios'})
+        if (!usuario_id || !livro_id || !data_devolucao_prevista) return res.status(400)
+            .json({erro: 'livro, usuario e data de devolução são obrigatórios'})
 
-    const emprestimo = await criarEmprestimo(usuario_id, livro_id, data_devolucao_prevista);
-    res.status(201).json(emprestimo);
+        const emprestimo = await criarEmprestimo(usuario_id, livro_id, data_devolucao_prevista);
+        res.status(201).json(emprestimo);
+    } catch(err) {
+        res.status(400)
+    }
 }
 
 const listar = async (req, res) => {
@@ -31,10 +35,14 @@ const atualizar = async (req, res) => {
 }
 
 const deletar = async (req, res) => {
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ erro: 'id é obrigatório' });
-    await deletarEmprestimo(id);
-    res.status(204).send();
+    try {
+        const {id} = req.params;
+        if (!id) return res.status(400).json({erro: 'id é obrigatório'});
+        await deletarEmprestimo(id);
+        res.status(204).send();
+    } catch(err) {
+        res.status(404).json({ error: err.message });
+    }
 }
 
 module.exports = { criar, listar, deletar, buscarPorId, atualizar };
