@@ -113,10 +113,12 @@ describe("Usuários", () => {
     });
 
     test("deve retornar 404 ao deletar usuário inexistente", async () => {
-        try {
-            await axios.delete(`${api}/usuarios/99999`);
-        } catch (err) {
-            expect(err.response.status).toBe(404);
-        }
+        await expect(
+            axios.delete(`${api}/usuarios/8888`)
+        ).rejects.toMatchObject({
+            response: {
+                status: 404
+            }
+        });
     });
 });
