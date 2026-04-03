@@ -1,35 +1,45 @@
-const { criarLivro, buscarLivroPorId, atualizarLivro, deletarLivro, listarDisponiveis } = require("../services/livroService");
+const { criarLivro, listarLivros, pegarPorId, deletarLivro, atualizarLivro, listarLivrosDisponiveis } = require('../services/livroService');
 
-const criar = (req, res) => {
+const criar = async (req, res) => {
     const { titulo, autor } = req.body;
 
-    if (!titulo || !autor) return res.status(400).json({ error: "Título e autor são obrigatórios" });
+    if (!titulo || !autor) return res.status(400)
+        .json({ erro: 'titulo e autor são obrigatórios'})
 
-    const livro = criarLivro(titulo, autor);
+    const livro = await criarLivro(titulo, autor);
     res.status(201).json(livro);
-};
+}
 
-const buscarPorId = (req, res) => {
-    const livro = buscarLivroPorId(Number(req.params.id));
-    if (!livro) return res.status(404).json({ error: "Livro não encontrado" });
-    res.status(200).json(livro);
-};
+const listar = async (req, res) => {
+    const livros = await listarLivros();
+    res.status(200).json(livros);
+}
 
-const atualizar = (req, res) => {
-    const livro = atualizarLivro(Number(req.params.id), req.body);
-    if (!livro) return res.status(404).json({ error: "Livro não encontrado" });
-    res.status(200).json(livro);
-};
+const listarDisponiveis = async (req, res) => {
+    const livros = await listarLivrosDisponiveis();
+    res.status(200).json(livros);
+}
 
-const deletar = (req, res) => {
-    const removido = deletarLivro(Number(req.params.id));
-    if (!removido) return res.status(404).json({ error: "Livro não encontrado" });
+const buscarPorId = async (req, res) => {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ erro: 'id é obrigatório' });
+    const livros = await pegarPorId(id);
+    res.status(200).json(livros);
+}
+
+const atualizar = async (req, res) => {
+    const { id } = req.params;
+    const { titulo, autor } = req.body;
+    if (!id) return res.status(400).json({ erro: 'id é obrigatório' });
+    const livro = await atualizarLivro(titulo, autor, id);
+    res.status(201).json(livro);
+}
+
+const deletar = async (req, res) => {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ erro: 'id é obrigatório' });
+    await deletarLivro(id);
     res.status(204).send();
-};
+}
 
-const disponiveis = (req, res) => {
-    const livrosDisponiveis = listarDisponiveis();
-    res.status(200).json(livrosDisponiveis);
-};
-
-module.exports = { criar, buscarPorId, atualizar, deletar, disponiveis };
+module.exports = { criar, listar, deletar, buscarPorId, atualizar, listarDisponiveis };

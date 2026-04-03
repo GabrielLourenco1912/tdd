@@ -39,4 +39,8 @@ const pegarPorId = async (id) => {
     return livro;
 }
 
-module.exports = { criarLivro, listarLivros, deletarLivro, pegarPorId, atualizarLivro, listarLivrosDisponiveis };
+const resetarLivros = async (id) => {
+    await Livro.destroy({truncate: true});
+}
+
+module.exports = { criarLivro, listarLivros, deletarLivro, pegarPorId, atualizarLivro, listarLivrosDisponiveis, resetarLivros };
