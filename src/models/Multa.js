@@ -12,12 +12,13 @@ const Multa = sequelize.define('Multa', {
         allowNull: false,
     },
     valor: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     status_pagamento: {
         type: DataTypes.ENUM('pago', 'pendente', 'cancelado'),
         allowNull: false,
+        defaultValue: 'pendente'
     },
     data_geracao: {
         type: DataTypes.DATE,
