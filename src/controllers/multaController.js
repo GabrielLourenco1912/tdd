@@ -1,4 +1,4 @@
-const { criarMulta, listarMulta, pegarPorId, deletarMulta, atualizarMulta, listarMultasPorUsuario } = require('../services/multaService');
+const { criarMulta, listarMultas, pegarPorId, deletarMulta, atualizarMulta, listarMultasPorUsuario } = require('../services/multaService');
 
 const criar = async (req, res) => {
     try {
@@ -15,7 +15,7 @@ const criar = async (req, res) => {
 }
 
 const listar = async (req, res) => {
-    const multas = await listarMulta();
+    const multas = await listarMultas();
     res.status(200).json(multas);
 }
 
