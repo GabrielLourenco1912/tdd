@@ -12,7 +12,7 @@ const criarMulta = async (emprestimo_id, valor, status_pagamento, data_geracao) 
 };
 
 const atualizarMulta = async (emprestimo_id, valor, status_pagamento, data_geracao, id) => {
-    const multa = await multa.findByPk(id);
+    const multa = await Multa.findByPk(id);
     if (!multa) throw new Error();
     await multa.update({emprestimo_id, valor, status_pagamento, data_geracao});
     return {
