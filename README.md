@@ -26,8 +26,16 @@ PORT=3001
 
 ---
 
-## 3. Run tests
-[.sequelizerc](.sequelizerc)
+## 3. Run database middleware
+
+```bash
+npm run db:middleware
+```
+
+---
+
+## 4. Run tests
+
 ```bash
 npm test
 ```
@@ -38,4 +46,4 @@ npm test
 
 * MySQL must be running
 * Port 3306 must be free
-* Reset container if needed:
+* Reset container if needed
