@@ -51,8 +51,18 @@ const atualizar = async (req, res) => {
 
         const multas = await atualizarMulta(emprestimo_id, valor, status_pagamento, data_geracao, id);
         res.status(200).json(multas);
-    } catch (err){
-        res.status(404).json({ error: err.message });
+    } catch (err) {
+        if (err.message === "multa já quitada") {
+            return res.status(400).json({ error: err.message });
+        }
+
+        if (err.message === "multa not found") {
+            return res.status(404).json({ error: err.message });
+        }
+
+        console.error(err.message);
+
+        return res.status(500).json({ error: "erro interno" });
     }
 }
 
