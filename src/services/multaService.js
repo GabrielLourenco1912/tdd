@@ -13,7 +13,7 @@ const criarMulta = async (emprestimo_id, valor, status_pagamento, data_geracao) 
 
 const atualizarMulta = async (emprestimo_id, valor, status_pagamento, data_geracao, id) => {
     const multa = await Multa.findByPk(id);
-    if (!multa) throw new Error();
+    if (!multa) throw new Error("multa not found");
     await multa.update({emprestimo_id, valor, status_pagamento, data_geracao});
     return {
         id: multa.id,
@@ -35,7 +35,7 @@ const listarMultasPorUsuario = async (usuarioId) => {
                 model: Emprestimo,
                 attributes: [],
                 where: {
-                    user_id: usuarioId
+                    usuario_id: usuarioId
                 }
             }
         ]
