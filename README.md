@@ -29,7 +29,7 @@ PORT=3001
 ## 3. Run database middleware
 
 ```bash
-npm run db:middleware
+npm run db:migrate
 ```
 
 ---
