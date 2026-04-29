@@ -47,6 +47,7 @@ const deletarUsuario = async (id) => {
 
 const pegarPorId = async (id) => {
     const usuario = await Usuario.findByPk(id);
+    if (!usuario) throw new Error('Usuário não encontrado');
     return usuario;
 }
 

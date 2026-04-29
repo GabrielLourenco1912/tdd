@@ -4,12 +4,14 @@ const api = `http://localhost:${process.env.PORT || 3000}`;
 
 describe("Usuários", () => {
     test("deve retornar uma lista de usuários", async () => {
+        expect.assertions(2);
         const res = await axios.get(`${api}/usuarios`);
         expect(res.status).toBe(200);
         expect(Array.isArray(res.data)).toBe(true);
     });
 
     test("deve retornar um usuário pelo id", async () => {
+        expect.assertions(4);
         const usuario = await axios.post(`${api}/usuarios`, {
             nome: "João Silva",
             email: `joao_${Date.now()}@email.com`,
@@ -24,6 +26,7 @@ describe("Usuários", () => {
     });
 
     test("deve retornar 404 para usuário inexistente", async () => {
+        expect.assertions(1);
         try {
             await axios.get(`${api}/usuarios/99999`);
         } catch (err) {
@@ -32,6 +35,7 @@ describe("Usuários", () => {
     });
 
     test("deve criar um novo usuário", async () => {
+        expect.assertions(4);
         const res = await axios.post(`${api}/usuarios`, {
             nome: "João Silva",
             email: `joao_${Date.now()}@email.com`,
@@ -45,6 +49,7 @@ describe("Usuários", () => {
     });
 
     test("deve retornar 400 ao criar usuário sem nome", async () => {
+        expect.assertions(1);
         try {
             await axios.post(`${api}/usuarios`, {
                 email: "joao@email.com",
@@ -57,6 +62,7 @@ describe("Usuários", () => {
     });
 
     test("deve retornar 400 ao criar usuário sem email", async () => {
+        expect.assertions(1);
         try {
             await axios.post(`${api}/usuarios`, {
                 nome: "João Silva",
@@ -69,6 +75,7 @@ describe("Usuários", () => {
     });
 
     test("deve retornar 400 ao criar usuário com email já cadastrado", async () => {
+        expect.assertions(1);
         const email = `duplicado_${Date.now()}@email.com`;
         await axios.post(`${api}/usuarios`, { nome: "Maria Souza", email, senha: "123456", tipo: "aluno" });
 
@@ -80,6 +87,7 @@ describe("Usuários", () => {
     });
 
     test("deve atualizar os dados de um usuário", async () => {
+        expect.assertions(2);
         const criado = await axios.post(`${api}/usuarios`, {
             nome: "Pedro Antigo",
             email: `pedro_${Date.now()}@email.com`,
@@ -93,6 +101,7 @@ describe("Usuários", () => {
     });
 
     test("deve retornar 404 ao atualizar usuário inexistente", async () => {
+        expect.assertions(1);
         try {
             await axios.put(`${api}/usuarios/99999`, { nome: "Ninguém" });
         } catch (err) {
@@ -101,6 +110,7 @@ describe("Usuários", () => {
     });
 
     test("deve remover um usuário", async () => {
+        expect.assertions(1);
         const criado = await axios.post(`${api}/usuarios`, {
             nome: "Para Deletar",
             email: `deletar_${Date.now()}@email.com`,
@@ -113,6 +123,7 @@ describe("Usuários", () => {
     });
 
     test("deve retornar 404 ao deletar usuário inexistente", async () => {
+        expect.assertions(1);
         await expect(
             axios.delete(`${api}/usuarios/8888`)
         ).rejects.toMatchObject({

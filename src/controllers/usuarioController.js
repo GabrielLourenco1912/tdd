@@ -25,10 +25,14 @@ const listar = async (req, res) => {
 }
 
 const buscarPorId = async (req, res) => {
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ erro: 'id é obrigatório' });
-    const usuario = await pegarPorId(id);
-    res.status(200).json(usuario);
+    try {
+        const {id} = req.params;
+        if (!id) return res.status(400).json({erro: 'id é obrigatório'});
+        const usuario = await pegarPorId(id);
+        res.status(200).json(usuario);
+    } catch (error) {
+        res.status(404).json({ erro: error.message });
+    }
 }
 
 const atualizar = async (req, res) => {

@@ -4,18 +4,21 @@ const api = `http://localhost:${process.env.PORT || 3000}`;
 
 describe('Rotas de API - ATV03', ()=> {
     test('GET /livros lista os livros', async () => {
+        expect.assertions(2);
         const res = await axios.get(`${api}/livros`);
         expect(res.status).toBe(200);
         expect(Array.isArray(res.data)).toBe(true);
     });
 
     test('GET /livros/:id busca um livro por id', async () => {
+        expect.assertions(1);
         const id = 103;
         const res = await axios.get(`${api}/livros/${id}`);
         expect(res.status).toBe(200);
     });
 
     test('POST /livros cria um livro', async () => {
+        expect.assertions(2);
         const res = await axios.post(`${api}/livros`, {
             titulo: 'Clean Code',
             autor: 'Martin Code'
@@ -27,6 +30,7 @@ describe('Rotas de API - ATV03', ()=> {
     });
 
     test('PUT /livros/:id atualiza um livro', async () => {
+        expect.assertions(2);
         const livro = await axios.post(`${api}/livros`, { titulo: 'Clean Code', autor: 'Martin Code' });
         const novoTitulo = 'Livro Novo'
         const novoAutor = 'Josue'
@@ -41,12 +45,14 @@ describe('Rotas de API - ATV03', ()=> {
     });
 
     test('DELETE /livros/:id deleta um livro', async () => {
+        expect.assertions(1);
         const livro = await axios.post(`${api}/livros`, { titulo: 'Clean Code', autor: 'Martin Code' });
         const res = await axios.delete(`${api}/livros/${livro.data.id}`);
         expect(res.status).toBe(204);
     });
 
     test('GET /livros/disponiveis retorna os livros disponiveis', async () => {
+        expect.assertions(2);
         const res = await axios.get(`${api}/livros/disponiveis`);
         expect(res.status).toBe(200);
         expect(Array.isArray(res.data)).toBe(true);

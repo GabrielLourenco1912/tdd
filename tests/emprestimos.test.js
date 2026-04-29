@@ -24,6 +24,7 @@ async function init (disponivel = true) {
 
 describe("Empréstimos", () => {
     test("POST /emprestimos deve registrar um novo empréstimo", async () => {
+        expect.assertions(2);
         const { LIVRO_ID, USUARIO_ID } = await init();
         const res = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
@@ -37,12 +38,14 @@ describe("Empréstimos", () => {
     });
 
     test("GET /emprestimos deve retornar uma lista de empréstimos", async () => {
+        expect.assertions(2);
         const res = await axios.get(`${api}/emprestimos`);
         expect(res.status).toBe(200);
         expect(Array.isArray(res.data)).toBe(true);
     });
 
     test("DELETE /emprestimos/:id deve deletar um empréstimo", async () => {
+        expect.assertions(1);
         const { LIVRO_ID, USUARIO_ID } = await init();
         const emprestimo = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
@@ -54,6 +57,7 @@ describe("Empréstimos", () => {
     });
 
     test("deve retornar 404 ao deletar empréstimo inexistente", async () => {
+        expect.assertions(1);
         await expect(
             axios.delete(`${api}/emprestimos/8888`)
         ).rejects.toMatchObject({
@@ -64,6 +68,7 @@ describe("Empréstimos", () => {
     });
 
     test("deve retornar um empréstimo pelo id", async () => {
+        expect.assertions(4);
         const { LIVRO_ID, USUARIO_ID } = await init();
         const emprestimo = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
@@ -119,6 +124,7 @@ describe("Empréstimos", () => {
     });
 
     test("deve registrar a devolução de um empréstimo", async () => {
+        expect.assertions(2);
         const { LIVRO_ID, USUARIO_ID } = await init();
         const emprestimo = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
@@ -131,6 +137,7 @@ describe("Empréstimos", () => {
     });
 
     test("deve retornar 404 ao devolver empréstimo inexistente", async () => {
+        expect.assertions(1);
         await expect(
             axios.put(`${api}/emprestimos/8888`, {devolucao: '2026-04-03'})
         ).rejects.toMatchObject({
@@ -141,6 +148,7 @@ describe("Empréstimos", () => {
     });
 
     test("deve listar empréstimos de um usuário específico", async () => {
+        expect.assertions(2);
         const { USUARIO_ID } = await init();
         const response = await axios.get(`${api}/emprestimos/usuarios/${USUARIO_ID}`);
 
