@@ -7,7 +7,7 @@ const criarMulta = async (emprestimo_id, valor, status_pagamento, data_geracao) 
         emprestimo_id: multa.emprestimo_id,
         valor: multa.valor,
         status_pagamento: multa.status_pagamento,
-        data_geracao: multa.data_geracao
+        data_geracao: new Date()
     };
 };
 
